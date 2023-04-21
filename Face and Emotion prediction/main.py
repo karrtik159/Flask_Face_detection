@@ -15,16 +15,11 @@ camera = cv2.VideoCapture(0)
 face_cascade = cv2.CascadeClassifier('Haarcascades/haarcascade_frontalface_default.xml')
     # https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
 eye_cascade = cv2.CascadeClassifier('Haarcascades/haarcascade_eye.xml')
-model = load_model(r"C:\Users\ASUS\Downloads\Alexnet_Emotic_Adam.h5")
+model = load_model("Alexnet_Emotic_Adam.h5")
 emotion_labels = ['Affection', 'Anger', 'Annoyance', 'Anticipation', 'Aversion', 'Confidence', 'Disapproval', 'Disconnection',
             'Disquietment', 'Doubt', 'Embarrassment', 'Engagement', 'Esteem', 'Excitement', 'Fatigue',
             'Fear', 'Happiness','Pain', 'Peace', 'Pleasure', 'Sadness', 'Sensitivity', 'Suffering', 'Surprise',
             'Sympathy', 'Yearning']
-
-# @app.before_request
-# def before_request():
-#     g.img = None
-#     g.user = None
 def draw_box(Image, x, y, w, h):
     cv2.line(Image, (x, y), (x + int(w / 5), y), WHITE, 2)
     cv2.line(Image, (x + int((w / 5) * 4), y), (x + w, y), WHITE, 2)
@@ -72,20 +67,25 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+Models=['Alexnet','VGG19','DenseNet']
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-            if request.form.get('Encrypt') == 'Encrypt':
+            print("Post running")
+            if request.form.get('Analyze') == 'Analyze':
+                # print("successful post 1")
                 camera = cv2.VideoCapture(0)
                 success, frame = camera.read()  # read the camera frame
                 frame = cv2.resize(frame, (224, 224))
 
                 emotion_label, confidence_score, pred = predict_emotion(frame)
                 mylist = [emotion_label, confidence_score]
+                # print("successful")
                 return render_template('index.html', mylist=mylist)
 
-            elif  request.form.get('Decrypt') == 'Decrypt':
+            elif  request.form.get('Watch') == 'Watch':
+                # print("successful post 2")
                 # pass # do something else
                 camera = cv2.VideoCapture(0)
                 success, frame = camera.read()  # read the camera frame
@@ -102,15 +102,21 @@ def index():
                         draw_box(gray, x, y, w, h)
 
                 r, jpg = cv2.imencode('.jpg', gray)
-
+                # print("successful")
                 return Response(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + jpg.tobytes() + b'\r\n\r\n', mimetype='multipart/x-mixed-replace; boundary=frame')
             else:
                 # pass # unknown
                 return render_template("index.html")
     elif request.method == 'GET':
             # return render_template("index.html")
-            print("No Post Back Call")
-    return render_template("index.html")
+            # print("No Post Back Call")
+            print("successful Get")
+            
+            return render_template("index.html",Models=Models)
+
+
+
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
