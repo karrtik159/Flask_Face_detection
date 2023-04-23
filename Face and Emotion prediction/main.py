@@ -1,7 +1,4 @@
 from flask import Flask, render_template, Response, request
-# /  g, send_file, Blueprint
-# from io import BytesIO
-# from PIL import Image, ImageDraw, ImageOps
 import tensorflow as tf
 from keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
@@ -9,17 +6,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
+
 WHITE = [255, 255, 255]
-app=Flask(__name__)
+# app=Flask(__name__)
+app = Flask(__name__,template_folder='./templates/',static_folder='./css/')
 camera = cv2.VideoCapture(0)
 face_cascade = cv2.CascadeClassifier('Haarcascades/haarcascade_frontalface_default.xml')
     # https://github.com/Itseez/opencv/blob/master/data/haarcascades/haarcascade_eye.xml
 eye_cascade = cv2.CascadeClassifier('Haarcascades/haarcascade_eye.xml')
 model = load_model("Alexnet_Emotic_Adam.h5")
+
 emotion_labels = ['Affection', 'Anger', 'Annoyance', 'Anticipation', 'Aversion', 'Confidence', 'Disapproval', 'Disconnection',
             'Disquietment', 'Doubt', 'Embarrassment', 'Engagement', 'Esteem', 'Excitement', 'Fatigue',
             'Fear', 'Happiness','Pain', 'Peace', 'Pleasure', 'Sadness', 'Sensitivity', 'Suffering', 'Surprise',
             'Sympathy', 'Yearning']
+
 def draw_box(Image, x, y, w, h):
     cv2.line(Image, (x, y), (x + int(w / 5), y), WHITE, 2)
     cv2.line(Image, (x + int((w / 5) * 4), y), (x + w, y), WHITE, 2)
@@ -48,6 +49,7 @@ def predict_emotion(image_path):
     Pred = pred[0]
 
     return emotion_label, confidence_score, Pred
+
 def gen_frames():  
     while True:
         success, frame = camera.read()  # read the camera frame
@@ -67,7 +69,9 @@ def gen_frames():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 Models=['Alexnet','VGG19','DenseNet']
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -111,6 +115,7 @@ def index():
             # return render_template("index.html")
             # print("No Post Back Call")
             print("successful Get")
+            Models=['Alexnet','VGG19','DenseNet']
             
             return render_template("index.html",Models=Models)
 

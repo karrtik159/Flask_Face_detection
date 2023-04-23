@@ -23,14 +23,16 @@ cd "Face and Emotion prediction"
 3. Create a new virtual environment or proceed it in your current environment by running 
 
     3.1 For Creating virtual environment
+
         ```
         virtualenv my_env
         ```
     3.2 For installing dependicies
+    
         ```
         pip install -r requirements.txt
         ```
-
+        
 4. After installing dependencies and replacing the path in main.py file for loadingg the model file.
 
 5. For running the webpage, execute the following.
