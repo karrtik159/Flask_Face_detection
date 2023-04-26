@@ -38,7 +38,7 @@ cd "Face and Emotion prediction"
 5. For running the webpage, execute the following.
 
 ```
-python main.py
+python app.py
 ```
 
 

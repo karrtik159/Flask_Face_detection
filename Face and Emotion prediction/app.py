@@ -5,6 +5,11 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+import base64
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import io
 
 # app=Flask(__name__)
 app = Flask(__name__,template_folder='./templates/',static_folder='./css/')
@@ -28,6 +33,33 @@ emotion_labels = ['Affection', 'Anger', 'Annoyance', 'Anticipation', 'Aversion',
 
 ## Default model
 model = load_model("Alexnet_Emotic_Adam.h5")
+
+## for plotting
+def plot(emotion_label, confidence_score , pred):
+    # Define a color map for the emotions
+    cmap = plt.get_cmap('Set3')
+
+    # Predict the emotion label of the image
+    # emotion_label, confidence_score , pred = predict_emotion(image_path)
+
+    # Plot a bar graph with the predicted emotions and their corresponding confidence scores
+    # plt.tight_layout()
+    fig, ax = plt.subplots(figsize=(20, 10))
+    bars = ax.bar(emotion_labels, pred, color=cmap(range(len(emotion_labels))))
+    plt.xticks(rotation=90)
+    plt.xlabel('Emotion')
+    plt.ylabel('Confidence Score')
+    plt.title(f'Predicted Emotion: {emotion_label} (Confidence: {confidence_score:.2f})')
+
+    # Add a legend to the bar graph
+    handles = [mpatches.Patch(color=cmap(i), label=emotion_labels[i]) for i in range(len(emotion_labels))]
+    ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left')
+    buf=io.BytesIO()
+    plt.savefig(buf,format='png')
+    buf.seek(0)
+    graph = base64.b64encode(buf.read()).decode('utf-8')
+    
+    return graph
 
 
 ## Bounding Box around face in a image
@@ -118,35 +150,30 @@ def predict():
                 camera = cv2.VideoCapture(0)
                 success, frame = camera.read()  # read the camera frame
                 frame = cv2.resize(frame, (224, 224))
-
+                r, jpg = cv2.imencode('.jpg', frame)
+                # print("successful")
+                
                 emotion_label, confidence_score, pred = predict_emotion(frame)
+                graph=plot(emotion_label, confidence_score, pred)
                 mylist = [emotion_label, confidence_score]
                 output=mylist[1]
+                # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                # faces = face_cascade.detectMultiScale(frame,1.1,7)
+                # for (x, y, w, h) in faces:
+                #     gray_face = cv2.resize((gray[y:y + h, x:x + w]), (110, 110))
+                #     eyes = eye_cascade.detectMultiScale(gray_face)
+                #     for (ex, ey, ew, eh) in eyes:
+                #         draw_box(gray, x, y, w, h)
+                # r, jpg = cv2.imencode('.jpg', gray)
                 # print("successful")
-                return render_template('index.html', mylist=mylist,emotion_label=mylist[0],prediction_text=" The predicted emotion label is having a confidence score = {}".format(output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
-
-            elif  request.form.get('Watch') == 'Watch':
-                # print("successful post 2")
-                # pass # do something else
-                camera = cv2.VideoCapture(0)
-                success, frame = camera.read()  # read the camera frame
-                # frame = cv2.resize(frame, (224, 224))
-                # image=frame
-                
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                faces = face_cascade.detectMultiScale(frame,1.1,7)
-                for (x, y, w, h) in faces:
-                    gray_face = cv2.resize((gray[y:y + h, x:x + w]), (110, 110))
-                    eyes = eye_cascade.detectMultiScale(gray_face)
-                    for (ex, ey, ew, eh) in eyes:
-                        draw_box(gray, x, y, w, h)
-
-                r, jpg = cv2.imencode('.jpg', gray)
+                img= jpg.tobytes()
+                img = base64.b64encode(img).decode('utf-8')
                 # print("successful")
-                return Response(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + jpg.tobytes() + b'\r\n\r\n', mimetype='multipart/x-mixed-replace; boundary=frame')
+                return render_template('index.html',img=img,graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+
             else:
                 # pass # unknown
-                return render_template("index.html")
+                return render_template("index.html",Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
     elif request.method == 'GET':
             # return render_template("index.html")
             # print("No Post Back Call")

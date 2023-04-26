@@ -13,14 +13,9 @@
                 <p>This web application is an Facial Emotion prediction system. The aim of this project is to predict individuals Facial emotion  by comparing different types of models.</p>
                 <p>After providing it with image in fixed size shape, The Emotion can be predited also with the confidence score.</p>
             
-            </div>
+        </div>
         <div class="data_part">
-            <div class="model_desc2">
-                <h2> Model Description </h2><br>
-                <p>This web application is an Facial Emotion prediction system. The aim of this project is to predict individuals Facial emotion  by comparing different types of models.</p>
-                <p>After providing it with image in fixed size shape, The Emotion can be predited also with the confidence score.</p>
             
-            </div>
             <h1>PREDICTION</h1>
         
             <form action="/predict" method="POST">
@@ -30,15 +25,17 @@
                     {% endfor %}
                   </select><br><br>
                 <button  class="pred-btn" type="submit" value="Analyze" name="Analyze">Analyze</button>
-                <button  class="pred-btn" type="submit" value="Watch" name="Watch" >Watch</button>
+                <!-- <button  class="pred-btn" type="submit" value="Watch" name="Watch" >Watch</button> -->
                 
         </form>
-            <h2>{{emotion_label}}</h2>
-            <h3> {{prediction_text}} </h3>
-        
+            
+        <h3> {{prediction_text}} </h3>
+        <div class="image-container">
+            <img src="data:image/png;base64,{{graph}}" alt="Graph Predicted">    
         </div>
-        
-
+        <img class="pred_img" src="data:image/jpeg;base64,{{ img }}" alt="Picture predicted">
+              
+        </div>
 
 
 
