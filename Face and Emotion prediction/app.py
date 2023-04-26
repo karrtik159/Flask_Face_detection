@@ -102,10 +102,10 @@ def video_feed():
 @app.route("/predict", methods=['GET', 'POST'])
 def predict():
     input_data = list(request.form.values())
-    
-    if input_data[1] == 'AlexNet':
+    print(input_data[0])
+    if input_data[0] == 'AlexNet':
         model = load_model("Alexnet_Emotic_Adam.h5")
-    elif input_data[1] == 'VGG19':
+    elif input_data[0] == 'VGG19':
         model = load_model("Alexnet_Emotic_Adam.h5")
     else:
         model = load_model("Alexnet_Emotic_Adam.h5")
@@ -123,7 +123,7 @@ def predict():
                 mylist = [emotion_label, confidence_score]
                 output=mylist[1]
                 # print("successful")
-                return render_template('index.html', mylist=mylist,emotion_label=mylist[0],prediction_text=" The predicted insurance charges is {}".format(output))
+                return render_template('index.html', mylist=mylist,emotion_label=mylist[0],prediction_text=" The predicted emotion label is having a confidence score = {}".format(output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
 
             elif  request.form.get('Watch') == 'Watch':
                 # print("successful post 2")
