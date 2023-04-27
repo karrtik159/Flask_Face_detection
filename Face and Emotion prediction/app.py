@@ -5,6 +5,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+from PIL import Image
 import base64
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -12,7 +13,7 @@ import matplotlib.patches as mpatches
 import io
 
 # app=Flask(__name__)
-app = Flask(__name__,template_folder='./templates/',static_folder='./css/')
+app = Flask(__name__,template_folder='./templates/',static_folder='./static/')
 
 camera = cv2.VideoCapture(0)
 
@@ -52,8 +53,8 @@ def plot(emotion_label, confidence_score , pred):
     plt.title(f'Predicted Emotion: {emotion_label} (Confidence: {confidence_score:.2f})')
 
     # Add a legend to the bar graph
-    handles = [mpatches.Patch(color=cmap(i), label=emotion_labels[i]) for i in range(len(emotion_labels))]
-    ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left')
+    # handles = [mpatches.Patch(color=cmap(i), label=emotion_labels[i]) for i in range(len(emotion_labels))]
+    # ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left')
     buf=io.BytesIO()
     plt.savefig(buf,format='png')
     buf.seek(0)
@@ -134,9 +135,9 @@ def video_feed():
 @app.route("/predict", methods=['GET', 'POST'])
 def predict():
     input_data = list(request.form.values())
-    print(input_data[0])
+    # print(input_data[0])
     if input_data[0] == 'AlexNet':
-        model = load_model("Alexnet_Emotic_Adam.h5")
+        model = load_model("./Models/Models/Alexnet_Emotic_Adam (1).h5")
     elif input_data[0] == 'VGG19':
         model = load_model("Alexnet_Emotic_Adam.h5")
     else:
@@ -144,7 +145,6 @@ def predict():
 
 
     if request.method == 'POST':
-            print("Post running")
             if request.form.get('Analyze') == 'Analyze':
                 # print("successful post 1")
                 camera = cv2.VideoCapture(0)
@@ -157,19 +157,32 @@ def predict():
                 graph=plot(emotion_label, confidence_score, pred)
                 mylist = [emotion_label, confidence_score]
                 output=mylist[1]
-                # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                # faces = face_cascade.detectMultiScale(frame,1.1,7)
-                # for (x, y, w, h) in faces:
-                #     gray_face = cv2.resize((gray[y:y + h, x:x + w]), (110, 110))
-                #     eyes = eye_cascade.detectMultiScale(gray_face)
-                #     for (ex, ey, ew, eh) in eyes:
-                #         draw_box(gray, x, y, w, h)
-                # r, jpg = cv2.imencode('.jpg', gray)
-                # print("successful")
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                faces = face_cascade.detectMultiScale(frame,1.1,7)
+                for (x, y, w, h) in faces:
+                    gray_face = cv2.resize((gray[y:y + h, x:x + w]), (110, 110))
+                    eyes = eye_cascade.detectMultiScale(gray_face)
+                    for (ex, ey, ew, eh) in eyes:
+                        draw_box(gray, x, y, w, h)
+                r, jpg = cv2.imencode('.jpg', gray)
+                print("successful")
                 img= jpg.tobytes()
                 img = base64.b64encode(img).decode('utf-8')
                 # print("successful")
-                return render_template('index.html',img=img,graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template('index.html',Image=img,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+            
+            elif request.form.get('Upload') == 'Upload':
+                print("successful post 2")
+                file = request.files['file']
+                img=Image.open(file)
+                img= img.resize((224,224))
+                # img = load_img(file, target_size=(224, 224))                
+                emotion_label, confidence_score, pred = predict_emotion(img)
+                graph=plot(emotion_label, confidence_score, pred)
+                mylist = [emotion_label, confidence_score]
+                output=mylist[1]
+                # print("successful")
+                return render_template('index.html',file_img=file,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
 
             else:
                 # pass # unknown
