@@ -33,7 +33,6 @@ emotion_labels = ['Affection', 'Anger', 'Annoyance', 'Anticipation', 'Aversion',
             'Sympathy', 'Yearning']
 
 ## Default model
-model = load_model("Alexnet_Emotic_Adam.h5")
 
 ## for plotting
 def plot(emotion_label, confidence_score , pred):
@@ -102,8 +101,10 @@ def gen_frames():
 
 ##For Predicting Images and showing the Emotion Label
 
-def predict_emotion(image_path):
+def predict_emotion(image_path,model):
     # Load the image and preprocess it
+    # model = load_model("Alexnet_Emotic_Adam.h5")
+
     # img = load_img(image_path, target_size=(224, 224))
 
     img = img_to_array(image_path)
@@ -125,8 +126,7 @@ def predict_emotion(image_path):
 
 @app.route('/')
 def index():
-    return render_template('index.html',Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
-    # return render_template('index.html')
+    return render_template('Home_index.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -134,26 +134,32 @@ def video_feed():
 
 @app.route("/predict", methods=['GET', 'POST'])
 def predict():
-    input_data = list(request.form.values())
-    # print(input_data[0])
-    if input_data[0] == 'AlexNet':
-        model = load_model("./Models/Models/Alexnet_Emotic_Adam (1).h5")
-    elif input_data[0] == 'VGG19':
-        model = load_model("Alexnet_Emotic_Adam.h5")
-    else:
-        model = load_model("Alexnet_Emotic_Adam.h5")
+    model = load_model("Alexnet_Emotic_Adam.h5")
+    
+    
 
 
     if request.method == 'POST':
             if request.form.get('Analyze') == 'Analyze':
-                # print("successful post 1")
+                input_data = list(request.form.values())
+                # print(input_data)
+                model = load_model("Alexnet_Emotic_Adam.h5")
+
+                input_data[0]='Alexnet'
+                if input_data[0] == 'Alexnet':
+                    model = load_model("static/Models/Models_TL/Alexnet_Emotic_Adam (1).h5")
+                elif input_data[0] == 'VGG19':
+                    model = load_model("static/Models/Models_TL/ALEXNET_Emotic_RMSprop (1).h5")
+                else:
+                    model = load_model("static/Models/Models_TL/ALEXNET_Emotic_SGD (1).h5")
+
                 camera = cv2.VideoCapture(0)
                 success, frame = camera.read()  # read the camera frame
                 frame = cv2.resize(frame, (224, 224))
                 r, jpg = cv2.imencode('.jpg', frame)
                 # print("successful")
                 
-                emotion_label, confidence_score, pred = predict_emotion(frame)
+                emotion_label, confidence_score, pred = predict_emotion(frame,model)
                 graph=plot(emotion_label, confidence_score, pred)
                 mylist = [emotion_label, confidence_score]
                 output=mylist[1]
@@ -169,29 +175,41 @@ def predict():
                 img= jpg.tobytes()
                 img = base64.b64encode(img).decode('utf-8')
                 # print("successful")
-                return render_template('index.html',Image=img,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template('prediction.html',Image=img,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
             
             elif request.form.get('Upload') == 'Upload':
                 print("successful post 2")
+                input_data = list(request.form.values())
+                # print(input_data)
+                input_data[0]='Alexnet'
+                if input_data[0] == 'Alexnet':
+                    model = load_model("static/Models/Models_TL/Alexnet_Emotic_Adam (1).h5")
+                elif input_data[0] == 'VGG19':
+                    model = load_model("static/Models/Models_TL/ALEXNET_Emotic_RMSprop (1).h5")
+                else:
+                    model = load_model("static/Models/Models_TL/ALEXNET_Emotic_SGD (1).h5")
                 file = request.files['file']
                 img=Image.open(file)
                 img= img.resize((224,224))
                 # img = load_img(file, target_size=(224, 224))                
-                emotion_label, confidence_score, pred = predict_emotion(img)
+                emotion_label, confidence_score, pred = predict_emotion(img,model)
                 graph=plot(emotion_label, confidence_score, pred)
                 mylist = [emotion_label, confidence_score]
                 output=mylist[1]
                 # print("successful")
-                return render_template('index.html',file_img=file,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template('prediction.html',file_img=file,emotion_label=mylist[0],pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
 
             else:
                 # pass # unknown
-                return render_template("index.html",Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template("prediction.html",Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
     elif request.method == 'GET':
-            # return render_template("index.html")
-            # print("No Post Back Call")
             print("successful Get")
             
-            return render_template('index.html',Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+            return render_template('prediction.html',Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+    
+@app.route('/presentation')
+def presentation():
+    return render_template('presentation.html')
+
 if __name__=='__main__':
     app.run(debug=True)

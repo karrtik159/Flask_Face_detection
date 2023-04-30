@@ -1,0 +1,498 @@
+{% extends 'Home_base.html' %}
+
+{% block title %}
+Home
+{% endblock title %}
+
+{% block css %}
+<style type="text/css">
+    .landing{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10vw 0 10vw;
+        height: 100vh;
+    }
+    
+    .landingText h1{
+        font-size: 4vw;
+        margin: 0 !important;
+    }
+    
+    .landingText h3{
+        margin: 6px !important;
+        font-size: 20px;
+        opacity: 0.3;
+        line-height: 30px;
+    }
+    
+    .landingText .btn{
+        width: 120px;
+        margin-top: 30px;
+        padding: 14px 20px 14px 20px;
+        background-color: #2f8be0;
+        border-radius: 45px;
+        text-align: center
+    }
+    
+    .landingText .btn a{
+        font-size: 1.2vw;
+        color: #fff;
+    }
+    
+    .landingImage img{
+        width: 28vw;
+    }
+    
+    
+    /* ABOUT CSS */
+    
+    .about{
+        height: 600px;
+        padding: 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    
+    .aboutText{
+        position: relative;
+        padding: 0 50px;
+        height: inherit;
+    }
+    
+    .aboutText h1{
+        position: relative;
+        left: 110px;
+    }
+    
+    .aboutText img{
+        width: 36vw;
+        
+        
+    }
+    
+    .aboutList{
+        width: 50%;
+    }
+    
+    ol{
+        list-style: none;
+        color: #e0501b;
+    }
+    
+    ol li{
+        font-size: 34px;
+        position: relative;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ebebeb;
+    }
+    
+    li p{
+        font-size: 16px;
+        color: #000;
+        padding-left: 60px;
+        line-height: 30px;
+        opacity: 0.6;
+    }
+    
+    li span{
+        position: absolute;
+        line-height: 25px;
+        font-weight: 600;
+    }
+    
+    /* INFO_SECTION CSS */
+    
+    .infoSection{
+        height: 600px;
+    }
+    
+    .infoHeader{
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .infoCards{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 40px 0 40px 0;
+    }
+    
+    .infoCards .card{
+        position: relative;
+        height: 360px;
+        width: 350px;
+        background: #fff;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.09), 0 10px 10px rgba(0,0,0,0.09)
+    }
+    
+    .infoCards .one .cardoneImg{
+        width: 180px;
+        position: absolute;
+        top: -50px;
+        right: -50px;
+    }
+    .infoCards .two .cardtwoImg{
+        width: 158px;
+        position: absolute;
+        top: -50px;
+        right: -50px;
+    }
+    .infoCards .three .cardthreeImg{
+        width: 200px;
+        position: absolute;
+        top: -50px;
+        right: -50px;
+    }
+    
+    .cardbgone{
+        height: 150px;
+        background-color: #ffce63;
+    }
+    .cardbgtwo{
+        height: 150px;
+        background-color: #a1cdff;
+    }
+    
+    .cardContent{
+        padding: 0 20px;
+    }
+    
+    .cardContent h2{
+        font-weight: 600;
+    }
+    
+    .cardContent p{
+        line-height: 30px;
+        opacity: 0.6
+    }
+    
+    
+    .cardContent .cardBtn{
+        position: absolute;
+        right: 20px;
+        padding: 10px;
+        background-color: #ededed;
+        width: 25px;
+        height: 20px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all ease-in-out 0.2s;
+    }
+    
+    .cardContent .cardBtn:hover{
+      background-color: #2f8be0;
+    }
+    
+    .cardContent .cardBtn .cardIcon{
+        position: relative;
+        top:0px;
+        left:0px;
+        width: 16px;
+    }
+    
+    
+    .teamSection{
+        height: 800px;
+    }
+    
+    .teamHeader{
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .teamCards{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 40px 0 40px 0;
+    }
+    
+    .teamCards .card{
+        position: relative;
+        height: 450px;
+        width: 350px;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 10px 22px rgba(0,0,0,0.09), 0 10px 10px rgba(0,0,0,0.09)
+    }
+    
+    .card .content{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .card .content .imgBx{
+        width:180px;
+        height:180px;
+        border-radius: 50%;
+        position: relative;
+        margin-bottom: 20px;
+        top:25px;
+        overflow: hidden;
+    }
+    
+    .card .content .imgBx img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .card .content .contentBx h4{
+        color:#2f8be0;
+        font-size: 1.7rem;
+        font-weight: bold;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+    
+    .card .content .contentBx h5{
+        color:#6c758f;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .card .content .sci{
+        margin-top: 20px;
+    
+    }
+    
+    .card .content .sci a{
+        text-decoration:none;
+        color:#6c758f;
+        font-size: 30px;
+        margin: 10px;
+        transition: color 0.4s;
+    }
+    
+    .card .content .sci a:hover{
+        color:#0196e3;
+    }
+    
+    
+    /* Banner */
+    
+    .banner{
+        height: 400px;
+        background-color: #ffce63;
+        display: flex;
+        flex-direction: row;
+        padding: 50px;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    
+    .bannerText h1{
+        font-size: 3vw;
+        color: #000;
+        font-weight: 600;
+    }
+    
+    .bannerText img{
+        width: 10vw;
+        margin-right: 20px;
+    }
+    
+    .bannerImg img{
+        width: 20vw;
+    }
+    
+    /* FOOTER CSS */
+    
+    .footer{
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+    
+    .footerlinks a{
+        margin: 20px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+    }
+    .footerlinks .mainlink{
+        color: #e0501b;
+    }
+    
+</style>
+{% endblock css %}
+
+{% block body %}
+<!-- LANDING PAGE -->
+
+<div class="landing">
+    <div class="landingText" data-aos="fade-up" data-aos-duration="1000">
+        <h1>Exploring Emotion Recognition Techniques using<span style="color:#1b7cd6;font-size: 4vw"> Emotic Dataset</span> </h1>
+        <div class="btn">
+            <a href="/predict">Proceed</a>
+        </div>
+    </div>
+    <div class="landingImage" data-aos="fade-down" data-aos-duration="2000">
+        <img src="static/bg.png" alt="">
+    </div>
+</div>
+
+<!-- ABOUT SECTION -->
+
+<div class="about">
+    <div class="aboutText" data-aos="fade-up" data-aos-duration="1000">
+        <h1><br><span style="color:#2f8be0;font-size:3vw">&nbsp;About Project</span> </h1>
+            <img src="static/20945843.jpg" alt="">
+    </div>
+    <div class="aboutList" data-aos="fade-left" data-aos-duration="1000">
+        <ol>
+            <li> 
+                <span>01</span>
+                 <p>Our Project Deals with 26 Emotion Classes</p>
+            </li>
+            <li> 
+                <span>02</span>
+                 <p>We are analysising and using Alexnet and VGG19 Model For Emotion Detection</p>
+            </li>
+            <li> 
+                <span>03</span>
+                 <p>Our Research deals with comparing the these 2 Pre-trained models under different Optimiser</p>
+            </li>
+            <li> 
+                <span>04</span>
+                 <p>We have also create a Web Application Interface for Selecting different versions of these models and running on real time image or upload image.</p>
+            </li>
+
+        </ol>
+    </div>
+</div>
+
+<!-- INFO SECTION -->
+
+<div class="infoSection">
+    <div class="infoHeader" data-aos="fade-up" data-aos-duration="1000">
+        <h1>3 Things<br> <span style="color:#e0501b">you can do with our Research Interface</span> </h1>
+    </div>
+    <div class="infoCards">
+        <div class="card one" data-aos="fade-up" data-aos-duration="1000">
+            <div class="cardbgone"></div>
+            <div class="cardContent">
+                <h2>Select Model</h2>
+                <p>Select the Models from the dropdown menu for the prediction. </p>
+                <a href="/predict">
+                    <div class="cardBtn">
+                        <img src="static/next.png" alt="" class="cardIcon">
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="card two" data-aos="fade-up" data-aos-duration="1300">
+            <div class="cardbgtwo"></div>
+            <div class="cardContent">
+                <h2>Analyze</h2>
+                <p>You can use these to predict emotion from the real time image capture from your computer.</p>
+                <a href="/predict">
+                    <div class="cardBtn">
+                        <img src="static/next.png" alt="" class="cardIcon">
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="card three" data-aos="fade-up" data-aos-duration="1600">
+            <div class="cardbgone"></div>
+            <div class="cardContent">
+                <h2>Watch</h2>
+                <p>This Feature will help you to predict emotion form the image upload from your computer.</p>
+                <a href="/predict">
+                    <div class="cardBtn">
+                        <img src="static/next.png" alt="" class="cardIcon">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="teamSection">
+    <div class="teamHeader" data-aos="fade-up" data-aos-duration="1000">
+        <h1><span style="color:#1b7cd6;font-size: 4vw">Our Team</span> </h1>
+    </div>
+    <div class="teamCards">
+        <div class="card" data-aos="fade-up" data-aos-duration="1000">
+            <div class="content">
+                <div class="imgBx">
+                    <img src="static/a.png" alt="" />
+                </div>
+                <div class="contentBx">
+                    <h4>Abhishek Jani</h4>
+                    <h5>19012011092</h5>
+                </div>
+                <div class="sci">
+                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-kaggle" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-duration="1300">
+            <div class="content">
+                <div class="imgBx">
+                    <img src="static/kjs_sir.jpeg" alt="" />
+                </div>
+                <div class="contentBx">
+                    <h4>Prof. Ketan Sarvakar</h4>
+                    <h5>Mentor</h5>
+                </div>
+                <div class="sci">
+                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-kaggle" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-duration="1300">
+            <div class="content">
+                <div class="imgBx">
+                    <img src="static/karrtik.jpeg" alt="" />
+                </div>
+                <div class="contentBx">
+                    <h4>Karrtik Baheti</h4>
+                    <h5>19012531005</h5>
+                </div>
+                <div class="sci">
+                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-github" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-kaggle" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>    
+
+<div class="footer">
+    <h2>All rights reserved for research4guni</h2>
+</div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+{% endblock body %}
+
+
+

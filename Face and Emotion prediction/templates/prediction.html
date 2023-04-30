@@ -1,0 +1,144 @@
+{% extends 'Home_base.html' %}
+
+
+{% block css %}
+<style type="text/css">
+body{
+justify-content: center;
+text-align:center;
+
+}
+.image-container img {
+  float: center;
+  width: 90%;
+  height: 90%;
+}
+
+h1{
+text-align:center;
+color: 	rgb(49, 49, 49);
+margin-bottom:30px;
+margin-top:10px;
+
+}
+
+.Input{
+height:45px;
+width:230px;
+margin-left:10px;
+border:2px;
+margin-bottom:5px;
+background:transparent;
+border-bottom:1px solid rgb(35, 193, 227);
+font-size:19px;
+color:rgb(49, 49, 49);
+padding-left:8px;
+
+}
+
+::placeholder{
+color:rgb(50,50,50);
+font-size:20px;
+padding-left:10px;
+
+}
+
+.pred-btn{
+text-align:center;
+height:60px;
+width:150px;
+margin-left:20px;
+font-size:25px;
+background:rgb(35, 193, 227);
+color:white;
+margin-top:10px;
+border:2px solid white;
+border-radius:30px;
+
+
+}
+.pred-btn:hover{
+background:rgb(209, 73, 212);
+color:black;
+border:2px solid black;
+}
+
+select option{
+color:black
+}
+
+.pred_uimg img{
+
+  width: 224px;
+  height: 224px;
+}
+@media screen and (max-width:content) {
+ body{
+  background:linear-gradient(to right,rgb(35, 193, 227),rgb(209, 73, 212));
+ }
+
+
+.Input{
+  margin-bottom: 5px;
+}
+
+}
+</style>
+{% endblock css %}
+{% block body %}
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<center>
+  <h1>Exploring Emotion Recognition Techniques using<span style="color:#1b7cd6;font-size:2vw"> Emotic Dataset</span> </h1>
+</center>
+<br/>
+<br/>
+
+<center>
+  <h2>PREDICTION</h2>
+</center>
+<form action="/predict" enctype="multipart/form-data" method="POST">
+  <label>Select Model</label>
+
+  <select name="comp_select" class="Input">
+      {% for o in Models %}
+      <option value="{{ o.Model }}">{{ o.Model }}</option>
+      {% endfor %}
+  </select>
+  <br/>
+  <br/>
+  <label> Select Picture </label>
+  <input type="file" name="file"> 
+  <br/>
+  <button  class="pred-btn" type="submit" value="Analyze" name="Analyze">Analyze</button>
+  <button  class="pred-btn" type="submit" value="Upload" name="Upload" >Watch</button>
+  
+</form>
+<h1>
+{{pred_model}}
+</h1>
+<h2>
+{{emotion_label}}
+</h2>
+<h3> {{prediction_text}} </h3>
+
+{% if Image %}
+  <img class="pred_img" src="data:image/jpeg;base64,{{ Image }}" alt="Picture predicted">
+{% endif %}
+
+{% if file_img %}
+<img class="pred_uimg" src="{{ url_for('static', filename=file_img.filename) }}" alt="Resized Image" style="width: 224px"/>
+{% endif %}
+
+{% if graph %}
+<div class ="data_part2">
+<div class="image-container">
+    <img src="data:image/png;base64,{{graph}}" alt="Graph Predicted">    
+</div>
+</div>
+{% endif %}
+{% endblock body %}
