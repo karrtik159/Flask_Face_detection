@@ -12,6 +12,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from keras.models import load_model
+import pandas as pd
+from openpyxl import load_workbook
 
 app = Flask(__name__,template_folder='./templates/',static_folder='./static/')
 
@@ -222,6 +224,14 @@ def predict():
 @app.route('/presentation')
 def presentation():
     return render_template('presentation.html')
+
+@app.route("/Models")
+def model():
+    return render_template('models.html')
+
+@app.route("/docs")
+def docs():
+    return render_template('docs.html')
 
 if __name__=='__main__':
     app.run(debug=True)
