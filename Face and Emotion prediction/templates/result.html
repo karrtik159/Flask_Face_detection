@@ -1,18 +1,83 @@
-<html>
+{% extends 'Home_base.html' %}
 
-<h2>Final Results</h2>
+{% block css %}
+<style type="text/css">
+    .landing{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 10vw 0 10vw;
+        height: 100vh;
+    }
+    
+    .landingText h1{
+        font-size: 3vw;
+        margin: 0 !important;
+    }
+    
+    .landingText h3{
+        margin: 6px !important;
+        font-size: 20px;
+        opacity: 0.3;
+        line-height: 30px;
+    }
+    
+    .landingText .btn{
+        width: 120px;
+        margin-top: 30px;
+        padding: 14px 20px 14px 20px;
+        background-color: #2f8be0;
+        border-radius: 45px;
+        text-align: center
+    }
+    
+    .landingText .btn a{
+        font-size: 1.2vw;
+        color: #fff;
+    }
+    
+    .landingImage img{
+        width: 40vw;
+        
+        padding: 0 0 0 10vw;
+    }
+    
+    
+    
+</style>
+{% endblock css %}
 
-<body>
-<table border=2>
- {% for key,value in result.items() %}
-    <tr>
-        {# This is the comment sections #}
-        <th>{{ key }}</th>
-        <th>{{ value }}</th>
+{% block body %}
 
-    </tr>  
-  {% endfor %}
-</table>
-</body>
+<br/>
+<br/>
 
-</html>
+
+<div class="landing">
+  <div class="landingText" data-aos="fade-up" data-aos-duration="1000">
+      <h1>Exploring Emotion Recognition Techniques using<span style="color:#1b7cd6;font-size: 3vw"> Emotic Dataset</span> </h1>
+      <h3>Camera Feed</h3>
+      
+      <p>
+        This feed is for checking or camera module or You can insert an image by yourself on the prediction page
+      </p>
+      <p>
+        Note:
+        Please adjust yourself as when you select Camera button on the prediction screen, the immediate frame will be captured. 
+      </p>
+  
+      <div class="btn">
+          <a href="/predict">Proceed</a>
+      </div>
+  </div>
+  <div class="landingImage" data-aos="fade-left" data-aos-duration="2000">
+    <img src="{{ url_for('video_feed') }}" style="vertical-align:bottom"></img>
+    <!-- <img src="static/bg.png" alt=""> -->
+  </div>
+</div>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+{% endblock body %}  

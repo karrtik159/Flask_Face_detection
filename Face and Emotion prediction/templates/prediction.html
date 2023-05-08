@@ -4,6 +4,7 @@
 {% block css %}
 <style type="text/css">
 body{
+background: #3156d1;
 justify-content: center;
 text-align:center;
 
@@ -72,73 +73,190 @@ color:black
   width: 224px;
   height: 224px;
 }
-@media screen and (max-width:content) {
- body{
-  background:linear-gradient(to right,rgb(35, 193, 227),rgb(209, 73, 212));
- }
-
-
-.Input{
-  margin-bottom: 5px;
+#em_list ul li:after { content: "  \00b7  "; }
+#em_list ul li:last-child:after { content: ""; }
+#em_list li{
+  list-style: none;
+  display: inline;
 }
 
-}
+</style>  
+<style type="text/css">
+  .landing{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10vw 0 10vw;
+      height: 100vh;
+  }
+  
+  .landingText h1{
+      font-size: 3vw;
+      margin: 0 !important;
+  }
+  
+  .landingText h3{
+    opacity: 0.6;
+    line-height: 40px;
+  }
+  
+  .landingText .btn{
+      width: 120px;
+      margin-top: 30px;
+      padding: 14px 20px 14px 20px;
+      background-color: #2f8be0;
+      border-radius: 45px;
+      text-align: center
+  }
+  
+  .landingText .btn a{
+      font-size: 1.2vw;
+      color: #fff;
+  }
+  
+  .landingImage img{
+      width: 15vw;
+  }
+  .pred-form{
+      display: flex;
+      flex-direction:column;
+      justify-content: space-between;
+  }
+  .partition{
+      display: flex;
+      flex-direction:row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10vw 0 10vw;
+  }
+  
 </style>
 {% endblock css %}
 {% block body %}
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
+<div class="landing">
+  <div class="landingText" data-aos="fade-up" data-aos-duration="1000">
+    <br/>  
+    <br/>  
+    <br/>  
+    <br/>  
+    <h1>AlexNet and VGG19 with <span style="color:#1b7cd6;font-size: 3vw">Emotic Dataset</span> </h1>
+      
+      <h3 style=" text-align: left;font-size: 2vw">
+        <ul class="fa-ul">
+          <li><i class="fa-li fa fa-spinner fa-spin"></i>The <span style="color:#1b7cd6;font-size: 2vw">Emotic dataset</span>  contains 26 different emotion labels.</li>
+          <br/>
+          <li><i class="fa-li fa fa-spinner fa-spin"></i><span style="color:#1b7cd6;font-size: 2vw"> VGG19 and AlexNet </span> are two deep learning models that can be used for multi-label classification of the Emotic dataset.
+            </li>
+          <br/>
 
-<center>
-  <h1>Exploring Emotion Recognition Techniques using<span style="color:#1b7cd6;font-size:2vw"> Emotic Dataset</span> </h1>
+          <li><i class="fa-li fa fa-spinner fa-spin"></i>The model takes an image and outputs a vector of 26 probabilities for each of the emotion labels.</li>
+          <br/>
+          <li><i class="fa-li fa fa-spinner fa-spin"></i>The predicted emotion label for an input image is the one with the highest probability value in the output vector.
+            </li>
+          <br/>
+          <li><i class="fa-li fa fa-spinner fa-spin"></i>Both <span style="color:#1b7cd6;font-size: 2vw">VGG19 and AlexNet</span> are state-of-the-art deep learning models that have shown excellent performance on many image classification tasks.
+            </li>
+            <br/>
+            
+            
+          </ul>
+          
+        </h3>
+        <ul class="fa-ul">
+          <li><i class="fa fa-paperclip"></i> Note:
+            Training these models can be computationally expensive and requires a large amount of labeled data.</li>
+        </ul>
+        <!-- <p> So , Finally we are here.</p>
+      <p>1. First , As u can see </p>
+      <p>You have multiple options for selecting models from 
+        
+      </p>
+      <ul>
+        {% for o in Models %}
+        <li >{{ o.Model }}</li>
+        {% endfor %}
+      </ul>
+      <p></p> -->
+
+    </div>
+    <div class="pred-form">
+      <div>
+        <h2>
+        <span style="color:#1b7cd6;font-size: 2vw"> Prediction</span>
+        </h2>
+      </div>
+      <form action="/predict" enctype="multipart/form-data" method="POST">
+      <label><h2><span style="color:#1b7cd6;">Select Model</span></h2></label>
+    
+      <select name="comp_select" class="Input">
+          {% for o in Models %}
+          <option value="{{ o.Model }}">{{ o.Model }}</option>
+          {% endfor %}
+      </select>
+      <br/>
+      <br/>
+      <label> <h2> <span style="color:#1b7cd6;">Select Picture </span></h2> </label>
+      <br/>  
+      <input type="file" name="file"> 
+      <br/>
+      <br/>
+    
+      <button  class="pred-btn" type="submit" value="Analyze" name="Analyze">Camera</button>
+      <button  class="pred-btn" type="submit" value="Upload" name="Upload" >Upload</button>
+      
+    </form>
+    </div>
+</div>
+{% if pred_model %}
+<center>  
+  <h1> <span style="color:rgb(209, 73, 212);">Results</span></h1>
 </center>
-<br/>
-<br/>
-
-<center>
-  <h2>PREDICTION</h2>
-</center>
-<form action="/predict" enctype="multipart/form-data" method="POST">
-  <label>Select Model</label>
-
-  <select name="comp_select" class="Input">
-      {% for o in Models %}
-      <option value="{{ o.Model }}">{{ o.Model }}</option>
-      {% endfor %}
-  </select>
-  <br/>
-  <br/>
-  <label> Select Picture </label>
-  <input type="file" name="file"> 
-  <br/>
-  <button  class="pred-btn" type="submit" value="Analyze" name="Analyze">Analyze</button>
-  <button  class="pred-btn" type="submit" value="Upload" name="Upload" >Watch</button>
-  
-</form>
-<h1>
-{{pred_model}}
-</h1>
-<h2>
-{{emotion_label}}
-</h2>
-<h3> {{prediction_text}} </h3>
-
-{% if Image %}
-  <img class="pred_img" src="data:image/jpeg;base64,{{ Image }}" alt="Picture predicted">
 {% endif %}
 
-{% if file_img %}
-<img class="pred_uimg" src="{{ url_for('static', filename=file_img.filename) }}" alt="Resized Image" style="width: 224px"/>
-{% endif %}
+
+<div class="partition">
+  <div>
+    {% if Image %}
+      <img class="pred_img" src="data:image/jpeg;base64,{{ Image }}" alt="Picture predicted">
+    {% endif %}
+
+    {% if file_img %}
+      <img class="pred_uimg" src="data:image/jpeg;base64,{{ file_img }}" alt="Resized Image" style="width: 224px"/>
+    {% endif %}
+  </div>
+  <div>
+    <h1>
+      {{pred_model}}
+      </h1>
+
+      <div id="em_list">
+        <ul>
+          <h2>
+            {% for o in emotion_label %}
+            <li><span> {{ o }}  </span></li>
+            {% endfor %}
+          </h2>
+        </ul>
+      </div>
+      
+      <h3> {{prediction_text}} </h3>
+      <br/>
+  </div>
+</div>
 
 {% if graph %}
-<div class ="data_part2">
-<div class="image-container">
-    <img src="data:image/png;base64,{{graph}}" alt="Graph Predicted">    
-</div>
-</div>
+  <div class ="data_part2">
+  <div class="image-container">
+      <img src="data:image/png;base64,{{graph}}" alt="Graph Predicted">    
+  </div>
+  </div>
 {% endif %}
+
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+
 {% endblock body %}
