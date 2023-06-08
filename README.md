@@ -67,3 +67,5 @@ Samples:
 Note:
 My Model is customised for returning values like confidence score for Image which was trained on EMOTIC dataset with custom modifications and now that models are used in this.
 
+If u want the steps to run the particular page it will be given in "Steps" folder with each and every steps recorded.
+
