@@ -63,7 +63,7 @@ Samples:
 
 3. Checking working of Camera Feed
 
-![image](https://github.com/karrtik159/Flask_Face_detection/assets/65113086/a7fc1e3a-6bae-47bc-8058-a719f7e50421)
+![Emotion Detection](https://github.com/karrtik159/Flask_Face_detection/assets/65113086/4d68093f-b03b-4a1f-a645-2d2ddafd3dad)
 
 
 Note:
