@@ -140,13 +140,13 @@ def predict():
     if request.method == 'POST':
             if request.form.get('Analyze') == 'Analyze':
                 input_data = list(request.form.values())
-                # print(input_data)
+                print(input_data)
                 model = load_model("Alexnet_Emotic_Adam.h5")
                 emotion_label=[]
-                input_data[0]='Alexnet'
-                if input_data[0] == 'Alexnet':
+                # input_data[0]='Alexnet'
+                if input_data[0] == 'Alexnet_Emotic_Adam_TL':
                     model = load_model("static/Models/Models_TL/Alexnet_Emotic_Adam (1).h5")
-                elif input_data[0] == 'VGG19':
+                elif input_data[0] == 'Alexnet_Emotic_RMSprop_TL':
                     model = load_model("static/Models/Models_TL/ALEXNET_Emotic_RMSprop (1).h5")
                 else:
                     model = load_model("static/Models/Models_TL/ALEXNET_Emotic_SGD (1).h5")
@@ -174,18 +174,18 @@ def predict():
                 img= jpg.tobytes()
                 img = base64.b64encode(img).decode('utf-8')
                 # print("successful")
-                return render_template('prediction.html',Image=img,emotion_label=emotion_label,pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template('prediction.html',Image=img,emotion_label=emotion_label,pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet_Emotic_Adam_TL'},{'Model':'Alexnet_Emotic_RMSprop_TL'},{'Model':'Alexnet_Emotic_SGD_TL'}])
             
             elif request.form.get('Upload') == 'Upload':
                 # print("successful post 2")
                 emotion_label=[]
                 
                 input_data = list(request.form.values())
-                # print(input_data)
-                input_data[0]='Alexnet'
-                if input_data[0] == 'Alexnet':
+                print(input_data)
+                # input_data[0]='Alexnet'
+                if input_data[0] == 'Alexnet_Emotic_Adam_TL':
                     model = load_model("static/Models/Models_TL/Alexnet_Emotic_Adam (1).h5")
-                elif input_data[0] == 'VGG19':
+                elif input_data[0] == 'Alexnet_Emotic_RMSprop_TL':
                     model = load_model("static/Models/Models_TL/ALEXNET_Emotic_RMSprop (1).h5")
                 else:
                     model = load_model("static/Models/Models_TL/ALEXNET_Emotic_SGD (1).h5")
@@ -211,15 +211,15 @@ def predict():
                 file= jpg.tobytes()
                 file = base64.b64encode(file).decode('utf-8')
                 # print("successful")
-                return render_template('prediction.html',file_img=file,emotion_label=emotion_label,pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template('prediction.html',file_img=file,emotion_label=emotion_label,pred_model=input_data[0],graph=graph,prediction_text=" The {} is having a confidence score = {}".format(mylist[0],output),Models=[{'Model':'Alexnet_Emotic_Adam_TL'},{'Model':'Alexnet_Emotic_RMSprop_TL'},{'Model':'Alexnet_Emotic_SGD_TL'}])
 
             else:
                 # pass # unknown
-                return render_template("prediction.html",Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+                return render_template("prediction.html",Models=[{'Model':'Alexnet_Emotic_Adam_TL'},{'Model':'Alexnet_Emotic_RMSprop_TL'},{'Model':'Alexnet_Emotic_SGD_TL'}])
     elif request.method == 'GET':
             print("successful Get")
             
-            return render_template('prediction.html',Models=[{'Model':'Alexnet'},{'Model':'VGG19'},{'Model':'DenseNet'}])
+            return render_template('prediction.html',Models=[{'Model':'Alexnet_Emotic_Adam_TL'},{'Model':'Alexnet_Emotic_RMSprop_TL'},{'Model':'Alexnet_Emotic_SGD_TL'}])
     
 @app.route('/presentation')
 def presentation():
