@@ -54,15 +54,17 @@ python app.py
 Samples:
 1. Home Page
 
-![image](https://user-images.githubusercontent.com/65113086/234911465-24dacaea-2f10-4bdf-8723-b71610a7fabe.png)
+![image](https://github.com/karrtik159/Flask_Face_detection/assets/65113086/427a8923-2501-4330-b5ea-81117d214701)
 
-2. To analyze by uploading image, Use Watch button.
+2. Prediction Page.
 
-![image](https://user-images.githubusercontent.com/65113086/234912106-1236f4fa-1e1b-48a6-9ac4-efeae54b6c32.png)
+![image](https://github.com/karrtik159/Flask_Face_detection/assets/65113086/06aa59cd-9f90-46af-a22e-afe240b14296)
 
-3. To analyze with web camera, Use Analyze button.
 
-![image](https://user-images.githubusercontent.com/65113086/234914457-c1b12fe8-77ec-48cb-83ff-b968452eee68.png)
+3. Checking working of Camera Feed
+
+![image](https://github.com/karrtik159/Flask_Face_detection/assets/65113086/a7fc1e3a-6bae-47bc-8058-a719f7e50421)
+
 
 Note:
 My Model is customised for returning values like confidence score for Image which was trained on EMOTIC dataset with custom modifications and now that models are used in this.
