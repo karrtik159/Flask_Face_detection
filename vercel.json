@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "Face and Emotion prediction/app.py",
+        "use": "@vercel/python"
+        
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "Face and Emotion prediction/app.py"
+      }
+    ]
+  }
