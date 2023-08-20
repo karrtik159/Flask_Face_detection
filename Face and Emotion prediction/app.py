@@ -8,12 +8,12 @@ from flask import Flask, render_template, Response, request
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from importlib import import_module
-import seaborn as sns
+# import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from keras.models import load_model
 import pandas as pd
-from openpyxl import load_workbook
+# from openpyxl import load_workbook
 
 app = Flask(__name__,template_folder='./templates/',static_folder='./static/')
 

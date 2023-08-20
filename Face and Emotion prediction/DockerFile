@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+
+FROM ubuntu
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt update
+RUN apt install python3-pip -y
+RUN apt-get install -y build-essential apt-utils
+# RUN sudo apt-get install libgl1-mesa-glx -y
+
+
+RUN apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev \
+  libavformat-dev libswscale-dev
+RUN  apt-get update && apt-get install -y  python3-opencv 
+
+WORKDIR /Face_and_Emotion_prediction
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
